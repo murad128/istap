@@ -15,8 +15,5 @@ RUN npm run build
 
 ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
-ENV PORT=8080
 
-EXPOSE 8080
-
-CMD ["sh", "-c", "npx prisma db push && node_modules/.bin/next start -p 8080 -H 0.0.0.0"]
+CMD ["sh", "-c", "npx prisma db push && node_modules/.bin/next start -p ${PORT:-3000} -H 0.0.0.0"]
