@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Job {
+  id                 String    @id @default(cuid())
+  sourceId           String?
+  sourceName         String
+  sourceUrl          String    @unique
+  titleAz            String
+  titleEn            String?
+  titleRu            String?
+  company            String
+  location           String    @default("Bakı")
+  salary             String?
+  salaryMin          Int?
+  salaryMax          Int?
+  salaryNegotiable   Boolean   @default(false)
+  jobType            String?
+  workMode           String?
+  experienceLevel    String?
+  categorySlug       String?
+  descriptionAz      String?
+  descriptionEn      String?
+  descriptionRu      String?
+  requirementsAz     String?
+  requirementsEn     String?
+  requirementsRu     String?
+  responsibilitiesAz String?
+  responsibilitiesEn String?
+  responsibilitiesRu String?
+  contentHash        String?
+  publishDate        DateTime?
+  expiryDate         DateTime?
+  status             String    @default("active")
+  viewCount          Int       @default(0)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@index([status])
+  @@index([categorySlug])
+  @@index([sourceName])
+  @@index([contentHash])
+  @@index([publishDate])
+  @@index([viewCount])
+  @@index([salaryMin])
+}
+
+model JobView {
+  id        String   @id @default(cuid())
+  jobId     String
+  sessionId String
+  createdAt DateTime @default(now())
+
+  @@unique([jobId, sessionId])
+  @@index([jobId])
+  @@index([createdAt])
+}
+
+model Source {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  url       String
+  active    Boolean   @default(true)
+  lastRun   DateTime?
+  jobsFound Int       @default(0)
+}
+
+model ImportLog {
+  id          String   @id @default(cuid())
+  sourceName  String
+  status      String
+  jobsFound   Int      @default(0)
+  jobsAdded   Int      @default(0)
+  jobsSkipped Int      @default(0)
+  error       String?
+  createdAt   DateTime @default(now())
+}
