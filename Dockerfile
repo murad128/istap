@@ -2,8 +2,8 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm ci
+COPY package*.json .npmrc ./
+RUN npm install --prefer-offline
 
 COPY . .
 
@@ -12,4 +12,7 @@ RUN npm run build
 
 EXPOSE 3000
 
-CMD npx prisma db push && npx tsx prisma/seed.ts 2>/dev/null || true && npm start
+ENV NODE_ENV=production
+ENV DATABASE_URL=file:./prisma/prod.db
+
+CMD npx prisma db push && node -e "try{require('./prisma/seed')}catch(e){}" 2>/dev/null || true && npm start
