@@ -8,12 +8,13 @@ COPY package*.json .npmrc ./
 RUN npm install --prefer-offline
 
 COPY . .
+# Remove .env so Railway env vars take effect
+RUN rm -f .env
 
 RUN npx prisma generate
 RUN npm run build
 
 ENV NODE_ENV=production
-ENV DATABASE_URL=file:/app/prisma/prod.db
 ENV HOSTNAME=0.0.0.0
 
 CMD ["sh", "-c", "npx prisma db push && npm start"]
