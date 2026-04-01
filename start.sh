@@ -1,15 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
-echo "📦 Installing dependencies..."
-npm install
-
-echo "🗄️ Setting up database..."
-npx prisma generate
+echo "Running Prisma migrations..."
 npx prisma db push
 
-echo "🌱 Seeding database..."
-npx tsx prisma/seed.ts
-
-echo "🚀 Starting dev server..."
-npm run dev
+echo "Starting Next.js on port ${PORT:-3000}..."
+exec ./node_modules/.bin/next start -p ${PORT:-3000} -H 0.0.0.0
