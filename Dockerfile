@@ -16,4 +16,4 @@ RUN npm run build
 ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
 
-CMD ["sh", "-c", "npx prisma db push --skip-generate && ./node_modules/.bin/next start -p ${PORT:-3000} -H 0.0.0.0"]
+CMD ["sh", "-c", "npx prisma db push || true; exec ./node_modules/.bin/next start -p ${PORT:-3000} -H 0.0.0.0"]
