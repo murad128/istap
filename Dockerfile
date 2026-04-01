@@ -9,12 +9,13 @@ RUN npm install --prefer-offline
 
 COPY . .
 RUN rm -f .env
-RUN chmod +x start.sh
 
 RUN npx prisma generate
+RUN npx prisma db push
 RUN npm run build
 
 ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
 
-CMD ["/app/start.sh"]
+ENTRYPOINT ["./node_modules/.bin/next"]
+CMD ["start", "-H", "0.0.0.0"]
