@@ -1,0 +1,8 @@
+[build]
+builder = "DOCKERFILE"
+
+[deploy]
+startCommand = "npx prisma db push && npm start"
+healthcheckPath = "/api/jobs"
+healthcheckTimeout = 60
+restartPolicyType = "ON_FAILURE"
