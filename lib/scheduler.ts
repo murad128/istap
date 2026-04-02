@@ -3,6 +3,10 @@ import cron from 'node-cron'
 let schedulerStarted = false
 
 export function startScheduler() {
+  if (process.env.DISABLE_SCHEDULER === 'true') {
+    console.log('[scheduler] Scheduler disabled.');
+    return;
+  }
   if (schedulerStarted) {
     console.log('[scheduler] Already started, skipping')
     return
